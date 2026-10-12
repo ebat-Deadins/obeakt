@@ -12,14 +12,35 @@ class Food(ABC):
         pass
 
 class Buuz(Food):
-    total = 0 
+    total = 0  
 
-    def __init__(self, filling, count=10, taste=Taste.SALTY):
+    def __init__(self, filling, count=10, cooked=False, sauces=None, taste=Taste.SALTY):
         self.filling = filling
-        self.count = count
-        self.cooked = False
+        self.count = count          
+        self.cooked = cooked
         self.taste = taste
-        Buuz.total += 1 
+        if sauces is None:
+            self.sauces = []
+        else:
+            self.sauces = sauces
+        Buuz.total += 1
+
+    @property
+    def count(self):
+        return self._count
+
+    @count.setter
+    def count(self, value):
+        if value < 0:
+            self._count = 0
+        elif value > 30:
+            self._count = 30
+        else:
+            self._count = value
+
+    @property
+    def is_empty(self):
+        return self._count == 0
 
     def show_status(self):
         if self.cooked:
@@ -32,16 +53,25 @@ class Buuz(Food):
         self.cooked = True
         print("[Жигнэх]", self.filling, "бууз жигнэгдлээ!")
 
-    def sell(self, amount):
+    def sell(self, amount=1, price=1500):
         if not self.cooked:
             print("[Алдаа] Түүхий бууз зарж болохгүй!")
+            return 0
         elif amount > self.count:
             print("[Алдаа] Ердөө", self.count, "бууз байна!")
+            return 0
         else:
             self.count = self.count - amount
-            total_price = amount * 1500  
-            print(f"[Зарлаа] {amount} {self.filling} бууз | +{total_price} төгрөг")
-            return total_price
+            money = amount * price
+            print(f"[Зарлаа] {amount} {self.filling} бууз | +{money} төгрөг")
+            return money
+
+    def add(self, amount=1):
+        self.count = self.count + amount
+        return self.count
+
+    def add_sauce(self, sauce):
+        self.sauces.append(sauce)
 
     @staticmethod
     def is_valid_filling(name):
@@ -52,11 +82,12 @@ class Buuz(Food):
         return cls.total
 
     @classmethod
-    def create_meat(cls, count=10):
-        return cls("мах", count, Taste.SALTY)
+    def create_meat(cls, count=10, taste=Taste.SALTY):
+        return cls("мах", count, False, None, taste)
 
 
-print("===== БУУЗНЫ ГАЗАР: ӨДӨР 3 =====")
+print("===== БУУЗНЫ ГАЗАР: ӨДӨР 4 =====")
+income = 0
 
 print("--- Дүүргэлт шалгах ---")
 fillings = ["мах", "м", "бяслаг"]
@@ -67,24 +98,37 @@ for f in fillings:
         print(f"[Шалгалт] {f} - хэт богино, бууз хийхгүй")
 
 print("--- Бууз хийх ---")
-meat = Buuz.create_meat()  # Defolt 10 mah buuz
-spicy = Buuz("хүнсний ногоо", 5, Taste.SPICY)
+meat = Buuz.create_meat(count=100)
+print("[Тогоо] 100 бууз хийхийг оролдлоо")
 meat.show_status()
-spicy.show_status()
-print("[Нийт] Өнөөдөр хийсэн бууз:", Buuz.get_total())
+meat.cook()
 
-print("--- Захиалга: Дорж, халуун амттай 2 бууз ---")
-income = 0
-spicy.cook()
-revenue = spicy.sell(2)
-income += revenue
-if spicy.taste == Taste.SPICY:
-    income += 500
-    print("[Амт] Халуун амт таарлаа! +500 төгрөг")
-print(f"[Орлого] {income} төгрөг")
+print("--- Захиалга 1: Дорж, 12 бууз ---")
+income = income + meat.sell(12)
+print("--- Захиалга 2: Болд, 18 бууз ---")
+income = income + meat.sell(18)
+print("[Тогоо] Хоосон эсэх:", meat.is_empty)
+
+print("--- Нөөц нэмэх ---")
+print("[Нөөц] 40 бууз нэмэхийг оролдлоо. Тогоонд:", meat.add(40))
+
+try:
+    meat.is_empty = False
+except AttributeError:
+    print("[Алдаа] is_empty зөвхөн унших боломжтой")
+
+print("--- Тогоо эвдэрлээ ---")
+meat.count = -5
+meat.show_status()
+print("[Тогоо] Хоосон эсэх:", meat.is_empty)
+
+print("[Нийт] Өнөөдөр хийсэн бууз:", Buuz.get_total())
 
 print("--- Загвар шалгах ---")
 try:
     f_obj = Food()
 except TypeError:
     print("[Алдаа] Food-оос шууд хоол хийж болохгүй")
+
+print("--- Өдрийн төгсгөл ---")
+print("[Орлого]", income, "төгрөг")
