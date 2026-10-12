@@ -32,3 +32,4 @@ meat.sell(20)
 print("--------Udriin tugsgul------------------")
 meat.show_status()
 #Bold was here
+#chinhuslen
