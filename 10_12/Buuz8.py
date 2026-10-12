@@ -157,7 +157,7 @@ class Shop:
 
 shop = Shop("Монгол бууз")
 shop.add_item(Buuz("мах", 20))
-shop.add_item(Khuushuur("мах", 8))
+shop.add_item(Khuushuur("мах", 108))
 shop.add_item(Drink("сүүтэй цай", 800, 10))
 
 print("===== БУУЗНЫ ГАЗАР: ТОГЛООМ ЭХЭЛЛЭЭ =====")
@@ -166,7 +166,7 @@ shop.show_menu()
 print("--- Бэлтгэх ---")
 shop.cook_all()
 
-dorj = Customer("Дорж", 20000)
+dorj = Customer("Дорж", 20000000000)
 bold = Customer("Болд", 12000)
 saraa = Customer("Сараа", 9000)
 
@@ -181,16 +181,20 @@ day2 = [
     Order(saraa, "мах хуушуур", 1),
     Order(dorj, "сүүтэй цай", 12),
 ]
-
+day3 = [
+    Order(dorj, "мах хуушуур", 100),
+]
 wins = 0
 if shop.run_day(1, 18000, day1):
     wins = wins + 1
 if shop.run_day(2, 16000, day2):
     wins = wins + 1
+if shop.run_day(3, 30000, day3):
+    wins = wins + 1
 
 print("===== ТОГЛООМЫН ДҮН =====")
-print("[Хожсон өдөр]", wins, "/ 2")
-if wins == 2:
+print("[Хожсон өдөр]", wins, "/ 3")
+if wins == 3:
     print("[Үр дүн] ШИЛДЭГ ЭЗЭН!")
 elif wins == 1:
     print("[Үр дүн] Муугүй байлаа.")
