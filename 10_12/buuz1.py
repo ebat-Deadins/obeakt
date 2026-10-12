@@ -31,3 +31,4 @@ print("--------zahialga 2: dorj, 20 buuz avah")
 meat.sell(20)
 print("--------Udriin tugsgul------------------")
 meat.show_status()
+#Bold was here
