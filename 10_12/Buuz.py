@@ -13,7 +13,7 @@ class Buuz:
         self.cooked = True
         print(f"Buuz with {self.filling} filling is now cooked.")
     def sell(self, amount):
-        if not self.count:
+        if not self.cooked:
             print(f"Raw buuz zarj bolhku")
         elif amount > self.count:
             print(f"Not enough buuz to sell. Available: {self.count}, requested: {amount}.")
