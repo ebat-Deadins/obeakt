@@ -13,7 +13,7 @@ class Buuz:
 
     def steam(self):
         self.cooked = True
-        print("[Жигнэх]", self.filling, "бууз жигнэглээ!")
+        print("[Жигнэх]", self.filling, "Buuz jignegdlee!")
 
     def sell(self, amount):
         if not self.cooked:
